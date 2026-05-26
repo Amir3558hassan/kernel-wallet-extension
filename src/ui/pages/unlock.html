@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unlock - KernelWallet</title>
+  <link rel="stylesheet" href="unlock.css">
+</head>
+<body>
+  <div class="unlock-page">
+    <div class="unlock-container">
+      <!-- Animated Logo -->
+      <div class="logo-animation">
+        <div class="logo-orbit">
+          <div class="orbit-ring ring-1"></div>
+          <div class="orbit-ring ring-2"></div>
+          <div class="orbit-ring ring-3"></div>
+        </div>
+        <div class="logo-core">
+          <span class="core-icon">🔐</span>
+          <div class="core-glow"></div>
+        </div>
+      </div>
+
+      <h1 class="unlock-title">KernelWallet</h1>
+      <p class="unlock-subtitle">Secure Multi-Chain Wallet</p>
+
+      <!-- Password Form -->
+      <form id="unlock-form" class="unlock-form">
+        <div class="password-wrapper">
+          <input 
+            type="password" 
+            id="password-input" 
+            class="password-input" 
+            placeholder="Enter your password"
+            autocomplete="off"
+            autofocus
+            required
+          >
+          <button type="button" id="toggle-password" class="toggle-password" title="Show/Hide">
+            👁️
+          </button>
+        </div>
+
+        <div class="password-strength hidden" id="password-strength">
+          <div class="strength-bar">
+            <div class="strength-fill" id="strength-fill"></div>
+          </div>
+          <span class="strength-text" id="strength-text"></span>
+        </div>
+
+        <button type="submit" class="unlock-btn" id="unlock-btn">
+          <span class="btn-content">
+            <span class="btn-icon">🔓</span>
+            <span class="btn-label">Unlock Wallet</span>
+          </span>
+          <div class="btn-loader hidden" id="btn-loader">
+            <div class="loader-spinner"></div>
+          </div>
+        </button>
+      </form>
+
+      <!-- Error Message -->
+      <div class="error-box hidden" id="error-box">
+        <span class="error-icon">⚠️</span>
+        <span class="error-text" id="error-text"></span>
+      </div>
+
+      <!-- Session Info -->
+      <div class="session-info" id="session-info">
+        <span class="session-icon">⏱️</span>
+        <span>Auto-lock after <strong id="timeout-display">10</strong> min of inactivity</span>
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="unlock-footer">
+        <button id="btn-forgot" class="footer-link">Forgot Password?</button>
+        <span class="footer-divider">|</span>
+        <button id="btn-restore" class="footer-link">Restore with Seed</button>
+      </div>
+    </div>
+
+    <!-- Background Effects -->
+    <div class="bg-particles" id="bg-particles"></div>
+    <div class="bg-gradient"></div>
+  </div>
+
+  <!-- Seed Phrase Restore Modal -->
+  <div class="modal hidden" id="restore-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Restore Wallet</h3>
+        <button class="modal-close" id="close-restore">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="restore-hint">Enter your 12 or 24-word seed phrase to restore your wallet.</p>
+        <textarea 
+          id="seed-input" 
+          class="seed-input" 
+          placeholder="word1 word2 word3 ... word12"
+          rows="3"
+        ></textarea>
+        <div class="seed-validation" id="seed-validation"></div>
+        <input 
+          type="password" 
+          id="new-password" 
+          class="password-input" 
+          placeholder="Create new password"
+        >
+        <button id="btn-confirm-restore" class="unlock-btn secondary">
+          Restore Wallet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="unlock.js" type="module"></script>
+</body>
+</html>

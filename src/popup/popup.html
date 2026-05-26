@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KernelWallet</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- LOCK SCREEN (shown when locked) -->
+  <div id="lock-screen" class="screen hidden">
+    <div class="lock-container">
+      <div class="logo-pulse">
+        <div class="logo-ring"></div>
+        <div class="logo-ring"></div>
+        <div class="logo-icon">🔐</div>
+      </div>
+      <h2 class="lock-title">KernelWallet</h2>
+      <p class="lock-subtitle">Secure Multi-Chain Wallet</p>
+      
+      <form id="unlock-form" class="lock-form">
+        <div class="input-group">
+          <input type="password" id="unlock-password" placeholder="Enter password" autocomplete="off" required>
+          <span class="input-icon">🔑</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-glow">
+          <span class="btn-text">Unlock Wallet</span>
+          <span class="btn-loader hidden"></span>
+        </button>
+      </form>
+      
+      <p id="unlock-error" class="error-message hidden"></p>
+      
+      <div class="lock-footer">
+        <button id="forgot-password" class="link-btn">Forgot Password?</button>
+        <span class="divider">•</span>
+        <button id="reset-wallet" class="link-btn danger">Reset Wallet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WELCOME SCREEN (first time user) -->
+  <div id="welcome-screen" class="screen hidden">
+    <div class="welcome-container">
+      <div class="welcome-logo">⚡</div>
+      <h1 class="welcome-title">Welcome to KernelWallet</h1>
+      <p class="welcome-desc">Your secure gateway to the multi-chain future</p>
+      
+      <div class="welcome-actions">
+        <button id="btn-create-wallet" class="btn btn-primary btn-large">
+          <span class="btn-icon">✨</span>
+          Create New Wallet
+        </button>
+        <button id="btn-import-wallet" class="btn btn-secondary btn-large">
+          <span class="btn-icon">📝</span>
+          Import Existing Wallet
+        </button>
+      </div>
+      
+      <p class="welcome-security-note">
+        🔒 Self-custodial • 🔐 Encrypted • 🌐 Multi-Chain
+      </p>
+    </div>
+  </div>
+
+  <!-- MAIN DASHBOARD (unlocked) -->
+  <div id="main-screen" class="screen">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="network-badge" id="network-badge">
+          <span class="network-dot" id="network-dot"></span>
+          <span class="network-name" id="network-name">Ethereum</span>
+          <span class="network-chevron">▼</span>
+        </div>
+      </div>
+      <div class="header-center">
+        <span class="app-title">KernelWallet</span>
+      </div>
+      <div class="header-right">
+        <button id="btn-settings" class="icon-btn" title="Settings">⚙️</button>
+        <button id="btn-lock" class="icon-btn" title="Lock">🔒</button>
+      </div>
+    </header>
+
+    <!-- Account Card -->
+    <div class="account-card">
+      <div class="account-header">
+        <div class="account-info">
+          <span class="account-label" id="account-label">Account 1</span>
+          <button id="btn-copy-address" class="copy-btn" title="Copy Address">
+            <span id="display-address">0x1234...5678</span>
+            <span class="copy-icon">📋</span>
+          </button>
+        </div>
+        <button id="btn-account-menu" class="icon-btn">⋮</button>
+      </div>
+      
+      <div class="balance-section">
+        <div class="balance-amount" id="total-balance">$0.00</div>
+        <div class="balance-change" id="balance-change">+0.00%</div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="action-bar">
+        <button id="btn-send" class="action-btn">
+          <div class="action-icon send-icon">↑</div>
+          <span>Send</span>
+        </button>
+        <button id="btn-receive" class="action-btn">
+          <div class="action-icon receive-icon">↓</div>
+          <span>Receive</span>
+        </button>
+        <button id="btn-swap" class="action-btn">
+          <div class="action-icon swap-icon">⇄</div>
+          <span>Swap</span>
+        </button>
+        <button id="btn-buy" class="action-btn">
+          <div class="action-icon buy-icon">+</div>
+          <span>Buy</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Assets List -->
+    <div class="section-header">
+      <h3>Your Assets</h3>
+      <button id="btn-add-token" class="link-btn small">+ Add Token</button>
+    </div>
+    
+    <div class="assets-list" id="assets-list">
+      <!-- Populated by JS -->
+      <div class="asset-item skeleton">
+        <div class="asset-icon skeleton-icon"></div>
+        <div class="asset-info">
+          <div class="skeleton-text"></div>
+          <div class="skeleton-text short"></div>
+        </div>
+        <div class="asset-balance">
+          <div class="skeleton-text"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="section-header">
+      <h3>Recent Activity</h3>
+      <button id="btn-view-all" class="link-btn small">View All</button>
+    </div>
+    
+    <div class="activity-list" id="activity-list">
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p>No transactions yet</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-tabs">
+        <button class="tab-btn active" data-tab="wallet">
+          <span class="tab-icon">👛</span>
+          <span>Wallet</span>
+        </button>
+        <button class="tab-btn" data-tab="browser">
+          <span class="tab-icon">🌐</span>
+          <span>Browser</span>
+        </button>
+        <button class="tab-btn" data-tab="activity">
+          <span class="tab-icon">📊</span>
+          <span>Activity</span>
+        </button>
+        <button class="tab-btn" data-tab="settings">
+          <span class="tab-icon">⚙️</span>
+          <span>Settings</span>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- SEND MODAL -->
+  <div id="send-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Send Crypto</h3>
+        <button class="modal-close" id="close-send">✕</button>
+      </div>
+      
+      <form id="send-form" class="modal-body">
+        <div class="form-group">
+          <label>Select Asset</label>
+          <select id="send-asset" class="form-select">
+            <option value="ETH">Ethereum (ETH)</option>
+            <option value="USDT">Tether USD (USDT)</option>
+            <option value="BTC">Bitcoin (BTC)</option>
+            <option value="SOL">Solana (SOL)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Recipient Address</label>
+          <div class="input-with-actions">
+            <input type="text" id="send-address" placeholder="0x... or bc1... or SOL..." autocomplete="off">
+            <button type="button" id="btn-paste" class="input-action" title="Paste">📋</button>
+            <button type="button" id="btn-qr-scan" class="input-action" title="Scan QR">📷</button>
+          </div>
+          <span id="address-validation" class="validation-msg"></span>
+        </div>
+        
+        <div class="form-group">
+          <label>Amount</label>
+          <div class="amount-input-group">
+            <input type="number" id="send-amount" placeholder="0.00" step="any" min="0">
+            <button type="button" id="btn-max" class="input-action text">MAX</button>
+          </div>
+          <div class="balance-hint">
+            Balance: <span id="send-balance">0.00 ETH</span>
+          </div>
+        </div>
+        
+        <div class="fee-estimate">
+          <span>Network Fee</span>
+          <span id="network-fee">~$0.00</span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-full">
+          Review Send
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- RECEIVE MODAL -->
+  <div id="receive-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Receive Crypto</h3>
+        <button class="modal-close" id="close-receive">✕</button>
+      </div>
+      
+      <div class="modal-body center">
+        <div class="qr-container">
+          <div id="receive-qr" class="qr-code">QR_PLACEHOLDER</div>
+          <div class="qr-glow"></div>
+        </div>
+        
+        <div class="receive-address-box">
+          <code id="receive-address" class="address-code">0x1234567890abcdef...</code>
+          <button id="btn-copy-receive" class="btn btn-secondary btn-small">
+            📋 Copy Address
+          </button>
+        </div>
+        
+        <div class="receive-warning">
+          ⚠️ Only send <strong id="receive-asset-name">ETH</strong> on <strong id="receive-network-name">Ethereum</strong> to this address.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

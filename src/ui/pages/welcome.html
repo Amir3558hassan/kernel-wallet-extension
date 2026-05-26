@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - KernelWallet</title>
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+  <div class="welcome-page">
+    <!-- Animated Background -->
+    <div class="bg-mesh">
+      <div class="mesh-blob blob-1"></div>
+      <div class="mesh-blob blob-2"></div>
+      <div class="mesh-blob blob-3"></div>
+    </div>
+    
+    <div class="bg-grid"></div>
+
+    <!-- Content -->
+    <div class="welcome-content">
+      <!-- Logo -->
+      <div class="brand-logo">
+        <div class="logo-shape">
+          <div class="shape-inner"></div>
+          <div class="shape-ring ring-a"></div>
+          <div class="shape-ring ring-b"></div>
+        </div>
+        <div class="logo-text">KW</div>
+      </div>
+
+      <h1 class="main-title">KernelWallet</h1>
+      <p class="tagline">The Future of Self-Custodial Finance</p>
+
+      <!-- Feature Cards -->
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">🔐</div>
+          <span>Self-Custodial</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <span>Multi-Chain</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <span>Lightning Fast</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="action-area">
+        <button id="btn-create" class="action-btn primary">
+          <span class="btn-glow"></span>
+          <span class="btn-content">
+            <span class="btn-emoji">✨</span>
+            Create New Wallet
+          </span>
+        </button>
+        
+        <button id="btn-import" class="action-btn secondary">
+          <span class="btn-content">
+            <span class="btn-emoji">📝</span>
+            Import Existing Wallet
+          </span>
+        </button>
+      </div>
+
+      <p class="security-note">
+        <span class="shield">🛡️</span>
+        Your keys, your crypto. Always.
+      </p>
+    </div>
+
+    <!-- Create Wallet Modal -->
+    <div class="modal hidden" id="create-modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-panel">
+        <button class="panel-close" id="close-create">✕</button>
+        
+        <div class="panel-header">
+          <h2>Create Your Wallet</h2>
+          <p>This password encrypts your wallet locally</p>
+        </div>
+
+        <form id="create-form" class="panel-form">
+          <div class="input-group">
+            <label>Wallet Name</label>
+            <input type="text" id="wallet-name" placeholder="My Wallet" value="My Wallet">
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <div class="password-box">
+              <input type="password" id="create-password" placeholder="Min 8 chars, mixed case + number" required>
+              <button type="button" class="toggle-pw" id="toggle-create-pw">👁️</button>
+            </div>
+            <div class="strength-meter" id="create-strength">
+              <div class="meter-track">
+                <div class="meter-fill" id="meter-fill"></div>
+              </div>
+              <span class="meter-label" id="meter-label"></span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Confirm Password</label>
+            <input type="password" id="confirm-password" placeholder="Repeat password" required>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="terms-check" required>
+            <label for="terms-check">
+              I understand that losing my seed phrase means losing my funds forever
+            </label>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submit-create">
+            <span class="submit-text">Create Wallet</span>
+            <div class="submit-loader hidden"></div>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Import Wallet Modal -->
+    <div class="modal hidden" id="import-modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-panel">
+        <button class="panel-close" id="close-import">✕</button>
+        
+        <div class="panel-header">
+          <h2>Import Wallet</h2>
+          <p>Enter your seed phrase to restore</p>
+        </div>
+
+        <form id="import-form" class="panel-form">
+          <div class="input-group">
+            <label>Seed Phrase (12 or 24 words)</label>
+            <textarea id="import-seed" rows="3" placeholder="word1 word2 word3 ... word12" required></textarea>
+            <div class="word-count" id="word-count">0 words</div>
+          </div>
+
+          <div class="input-group">
+            <label>New Password</label>
+            <input type="password" id="import-password" placeholder="Create secure password" required>
+          </div>
+
+          <button type="submit" class="submit-btn secondary" id="submit-import">
+            <span class="submit-text">Restore Wallet</span>
+            <div class="submit-loader hidden"></div>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Seed Phrase Backup Modal -->
+    <div class="modal hidden" id="seed-modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-panel seed-panel">
+        <div class="panel-header">
+          <h2>🔐 Backup Your Seed Phrase</h2>
+          <p class="warning-text">Write these words down in order. Never share them with anyone.</p>
+        </div>
+
+        <div class="seed-grid" id="seed-grid">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="seed-actions">
+          <button id="btn-copy-seed" class="seed-btn">📋 Copy (Not Recommended)</button>
+          <button id="btn-saved-seed" class="seed-btn primary">I've Written It Down</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="welcome.js" type="module"></script>
+</body>
+</html>
